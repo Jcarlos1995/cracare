@@ -1,0 +1,19 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (contienen contraseñas)
+.env
+.env.local
+.env.*.local
+
+# Prisma
+backend/prisma/migrations/*_migration_lock.toml
+
+# Build / logs
+dist/
+*.log
+.DS_Store
+
+# IDE
+.idea/
+.vscode/

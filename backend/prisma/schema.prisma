@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMINISTRADOR  // Logística de la empresa
+  MEDICO         // Médico
+  RAS            // Jefa de Enfermería
+  ENFERMERA      // Enfermera
+  RAA            // Jefa de OSS
+  OSS            // Operador Socio Sanitario
+  FISIOTERAPEUTA // Fisioterapista
+  RECEPCIONISTA  // Recepcionista
+}
+
+enum Turno {
+  MANANA
+  TARDE
+  NOCHE
+  GUARDIA
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  nombre       String
+  apellidos    String?
+  dniNif       String?  // DNI/NIF - documento identidad
+  telefono     String?
+  rol          Role     @default(RECEPCIONISTA)
+  activo       Boolean  @default(true)
+  // Campos específicos por rol (opcionales)
+  numColegiado String?  // Médico, Enfermera, RAS, Fisioterapista
+  especialidad String?  // Médico, Fisioterapista
+  certificacionOss String? // RAA, OSS
+  turno        Turno?
+  rasId        String?  // Enfermera -> referencia a RAS
+  raaId        String?  // OSS -> referencia a RAA
+  departamento String?  // Administrador
+  fechaAlta    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
