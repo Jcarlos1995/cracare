@@ -16,6 +16,12 @@ import HorariosEnfermera from './pages/HorariosEnfermera';
 import DiarioUnificado from './pages/DiarioUnificado';
 import Medicaciones from './pages/Medicaciones';
 import DiarioMedicaciones from './pages/DiarioMedicaciones';
+import Citas from './pages/Citas';
+import Materiales from './pages/Materiales';
+import RegistroDiario from './pages/RegistroDiario';
+import Actividades from './pages/Actividades';
+import MisTurnos from './pages/MisTurnos';
+import Terapias from './pages/Terapias';
 
 function PrivateRoute({ children, adminOnly, allowedRoles }) {
   const { user, loading } = useAuth();
@@ -52,11 +58,17 @@ function AppRoutes() {
         <Route path="horarios-enfermera" element={<PrivateRoute allowedRoles={['RAS']}><HorariosEnfermera /></PrivateRoute>} />
         <Route path="contratos" element={<PrivateRoute adminOnly><Contratos /></PrivateRoute>} />
         <Route path="reportes" element={<PrivateRoute adminOnly><Reportes /></PrivateRoute>} />
-        <Route path="pacientes" element={<PrivateRoute allowedRoles={['ADMINISTRADOR', 'RAA', 'RAS', 'MEDICO', 'ENFERMERA']}><Pacientes /></PrivateRoute>} />
-        <Route path="pacientes/:id" element={<PrivateRoute allowedRoles={['ADMINISTRADOR', 'RAA', 'RAS', 'MEDICO', 'ENFERMERA']}><PacienteDetalle /></PrivateRoute>} />
+        <Route path="pacientes" element={<PrivateRoute><Pacientes /></PrivateRoute>} />
+        <Route path="pacientes/:id" element={<PrivateRoute><PacienteDetalle /></PrivateRoute>} />
         <Route path="medicaciones" element={<PrivateRoute allowedRoles={['ADMINISTRADOR', 'RAS', 'MEDICO', 'ENFERMERA']}><Medicaciones /></PrivateRoute>} />
         <Route path="diario-unificado" element={<DiarioUnificado />} />
         <Route path="diario-medicaciones" element={<PrivateRoute allowedRoles={['ADMINISTRADOR', 'RAS', 'MEDICO', 'ENFERMERA']}><DiarioMedicaciones /></PrivateRoute>} />
+        <Route path="citas" element={<PrivateRoute allowedRoles={['RECEPCIONISTA']}><Citas /></PrivateRoute>} />
+        <Route path="materiales" element={<PrivateRoute allowedRoles={['RECEPCIONISTA']}><Materiales /></PrivateRoute>} />
+        <Route path="registro-diario" element={<PrivateRoute allowedRoles={['OSS', 'RAA']}><RegistroDiario /></PrivateRoute>} />
+        <Route path="actividades" element={<PrivateRoute allowedRoles={['OSS', 'RAA']}><Actividades /></PrivateRoute>} />
+        <Route path="mis-turnos" element={<PrivateRoute allowedRoles={['OSS']}><MisTurnos /></PrivateRoute>} />
+        <Route path="terapias" element={<PrivateRoute allowedRoles={['FISIOTERAPEUTA']}><Terapias /></PrivateRoute>} />
         <Route
           path="usuarios"
           element={

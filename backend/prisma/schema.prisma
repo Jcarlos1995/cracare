@@ -51,6 +51,9 @@ model User {
   consignasPersonales ConsignaPersonal[]
   solicitudesInsumo SolicitudInsumo[]
   medicamentosEfectuados MedicamentoPaciente[] @relation("EfectuadoPor")
+  ingresosMateriales IngresoMaterial[]
+  registrosCuidadosDiario RegistroCuidadosDiario[]
+  terapiasRehabilitacion TerapiaRehabilitacion[]
 }
 
 // Inventario: insumos de sanidad
@@ -117,6 +120,10 @@ model Paciente {
   medicamentos    MedicamentoPaciente[]
   tratamientos    TratamientoPaciente[]
   consignasPersonales ConsignaPersonal[]
+  citas           Cita[]
+  registrosCuidadosDiario RegistroCuidadosDiario[]
+  banoSemanal     BanoSemanal[]
+  terapiasRehabilitacion TerapiaRehabilitacion[]
 
   @@index([raaId])
 }
@@ -231,4 +238,123 @@ model HorarioEnfermeraDia {
   @@unique([rasId, fecha, turno])
   @@index([rasId])
   @@index([rasId, fecha])
+}
+
+// --- Módulo Recepcionista: visitas de familiares/amigos ---
+
+model Visitante {
+  id                  String   @id @default(cuid())
+  nombre              String
+  apellidos           String?
+  telefono            String?
+  email               String?
+  relacionConPaciente String?  // familiar, amigo, etc.
+  documento           String?  // DNI/NIF opcional
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  citas               Cita[]
+
+  @@index([nombre])
+}
+
+enum EstadoCita {
+  AGENDADA
+  REALIZADA
+  CANCELADA
+  NO_ASISTIO
+}
+
+model Cita {
+  id          String      @id @default(cuid())
+  pacienteId String
+  paciente   Paciente    @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  visitanteId String
+  visitante   Visitante   @relation(fields: [visitanteId], references: [id], onDelete: Cascade)
+  fechaHora  DateTime    // día y hora de la visita
+  estado     EstadoCita  @default(AGENDADA)
+  observaciones String?   @db.Text
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([pacienteId])
+  @@index([visitanteId])
+  @@index([fechaHora])
+  @@index([estado])
+}
+
+// Ingresos de materiales registrados por recepcionista (sanitarios o básicos/otros)
+enum CategoriaMaterial {
+  SANITARIA
+  BASICOS_OTROS
+}
+
+model IngresoMaterial {
+  id              String           @id @default(cuid())
+  fecha           DateTime         @db.Date
+  categoria       CategoriaMaterial
+  descripcion     String           @db.Text
+  cantidad        Int?             @default(1)
+  unidad          String?          // cajas, unidades, litros, etc.
+  observaciones   String?         @db.Text
+  registradoPorId String?
+  registradoPor   User?            @relation(fields: [registradoPorId], references: [id], onDelete: SetNull)
+  createdAt       DateTime        @default(now())
+
+  @@index([fecha])
+  @@index([categoria])
+}
+
+// --- Módulo OSS: registro diario de cuidados (comidas, evacuación, sueño, hidratación) ---
+model RegistroCuidadosDiario {
+  id              String    @id @default(cuid())
+  pacienteId      String
+  paciente        Paciente  @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  fecha           DateTime  @db.Date
+  desayunado      Boolean   @default(false)
+  almorzado       Boolean   @default(false)
+  merendado       Boolean   @default(false)
+  cenado          Boolean   @default(false)
+  evacuado        Boolean   @default(false)
+  evacuadoAlvo    Boolean   @default(false) // Alvo
+  dormido         Boolean   @default(false)
+  hidratado       Boolean   @default(false)
+  registradoPorId String?
+  registradoPor   User?     @relation(fields: [registradoPorId], references: [id], onDelete: SetNull)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([pacienteId, fecha])
+  @@index([pacienteId])
+  @@index([fecha])
+}
+
+// Baño semanal: RAA asigna qué residente tiene baño qué día (1=Lunes .. 7=Domingo). OSS solo visualiza.
+model BanoSemanal {
+  id         String   @id @default(cuid())
+  pacienteId String
+  paciente   Paciente @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  diaSemana  Int      // 1=Lunes, 2=Martes, ..., 7=Domingo
+  createdAt  DateTime @default(now())
+
+  @@unique([pacienteId, diaSemana])
+  @@index([pacienteId])
+  @@index([diaSemana])
+}
+
+// Terapia de rehabilitación — Fisioterapeuta registra por residente
+model TerapiaRehabilitacion {
+  id              String    @id @default(cuid())
+  pacienteId      String
+  paciente        Paciente  @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  nombreTerapia   String    // nombre de la terapia de rehabilitación
+  descripcion     String?   @db.Text
+  efectuada       Boolean   @default(false)
+  efectuadoAt     DateTime?
+  registradoPorId String?
+  registradoPor   User?     @relation(fields: [registradoPorId], references: [id], onDelete: SetNull)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([pacienteId])
+  @@index([efectuada])
 }

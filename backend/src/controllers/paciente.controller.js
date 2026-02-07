@@ -1,11 +1,9 @@
 import { prisma } from '../config/database.js';
 import { ROLES } from '../utils/roles.js';
 
+/** Cualquier usuario autenticado puede ver un paciente (para que todos puedan añadir consignas personales). */
 function canAccessPaciente(user, paciente) {
-  if (user.rol === ROLES.ADMINISTRADOR) return true;
-  if (user.rol === ROLES.RAA && paciente.raaId === user.id) return true;
-  if (user.rol === ROLES.RAS || user.rol === ROLES.MEDICO || user.rol === ROLES.ENFERMERA) return true;
-  return false;
+  return true;
 }
 
 function canEditPaciente(user) {
@@ -15,8 +13,11 @@ function canEditPaciente(user) {
 export const getPacientes = async (req, res) => {
   try {
     const where = {};
-    if (req.user.rol === ROLES.RAA) where.raaId = req.user.id;
-    // RAS, MEDICO y ENFERMERA ven todos los pacientes
+    if (req.user.rol === ROLES.RAA) {
+      where.OR = [{ raaId: null }, { raaId: req.user.id }];
+    }
+    if (req.user.rol === ROLES.OSS && req.user.raaId) where.raaId = req.user.raaId;
+    // Resto de roles ven todos los pacientes
     const pacientes = await prisma.paciente.findMany({
       where,
       orderBy: { nombre: 'asc' },

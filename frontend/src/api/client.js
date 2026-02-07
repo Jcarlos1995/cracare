@@ -110,6 +110,7 @@ export const solicitudesInsumoApi = {
 export const horariosApi = {
   getEquipo: () => api('/api/horarios/equipo'),
   getMes: (anio, mes) => api(`/api/horarios/mes?anio=${anio}&mes=${mes}`),
+  getMisTurnos: (anio, mes) => api(`/api/horarios/mis-turnos?anio=${anio}&mes=${mes}`),
   setDia: (fecha, asignaciones) => api('/api/horarios/dia', { method: 'POST', body: JSON.stringify({ fecha, asignaciones }) }),
 };
 
@@ -156,4 +157,48 @@ export const diarioUnificadoApi = {
 export const reportesApi = {
   mensual: (anio, mes) => api(`/api/reportes/mensual?anio=${anio}&mes=${mes}`),
   exportUrl: (anio, mes) => `${API_BASE}/api/reportes/export?anio=${anio}&mes=${mes}`,
+};
+
+// Recepcionista: visitantes, citas, ingresos de materiales
+export const visitantesApi = {
+  list: (params = {}) => api('/api/visitantes?' + new URLSearchParams(params).toString()),
+  get: (id) => api(`/api/visitantes/${id}`),
+  create: (body) => api('/api/visitantes', { method: 'POST', body: JSON.stringify(body) }),
+  update: (id, body) => api(`/api/visitantes/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+};
+
+export const citasApi = {
+  list: (params = {}) => api('/api/citas?' + new URLSearchParams(params).toString()),
+  getAgendadas: () => api('/api/citas/agendadas'),
+  get: (id) => api(`/api/citas/${id}`),
+  create: (body) => api('/api/citas', { method: 'POST', body: JSON.stringify(body) }),
+  update: (id, body) => api(`/api/citas/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (id) => api(`/api/citas/${id}`, { method: 'DELETE' }),
+};
+
+export const ingresosMaterialesApi = {
+  list: (params = {}) => api('/api/ingresos-materiales?' + new URLSearchParams(params).toString()),
+  get: (id) => api(`/api/ingresos-materiales/${id}`),
+  create: (body) => api('/api/ingresos-materiales', { method: 'POST', body: JSON.stringify(body) }),
+};
+
+// OSS/RAA: registro diario de cuidados y actividades (baño semanal)
+export const registroCuidadosApi = {
+  getByFecha: (fecha) => api('/api/registro-cuidados?' + new URLSearchParams({ fecha: fecha || new Date().toISOString().slice(0, 10) }).toString()),
+  upsert: (body) => api('/api/registro-cuidados', { method: 'POST', body: JSON.stringify(body) }),
+};
+
+export const actividadesApi = {
+  get: () => api('/api/actividades'),
+  getBanos: () => api('/api/actividades/banos'),
+  setBano: (body) => api('/api/actividades/banos', { method: 'POST', body: JSON.stringify(body) }),
+};
+
+// Fisioterapeuta: terapias de rehabilitación
+export const terapiasApi = {
+  list: () => api('/api/terapias'),
+  listByPaciente: (pacienteId) => api(`/api/pacientes/${pacienteId}/terapias`),
+  create: (body) => api('/api/terapias', { method: 'POST', body: JSON.stringify(body) }),
+  update: (id, body) => api(`/api/terapias/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (id) => api(`/api/terapias/${id}`, { method: 'DELETE' }),
 };

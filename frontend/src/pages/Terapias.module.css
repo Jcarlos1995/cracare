@@ -1,0 +1,108 @@
+.page {
+  padding: 0.5rem 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.card {
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 56px;
+}
+
+.error {
+  color: var(--error, #dc2626);
+  margin: 1rem 0 0;
+}
+
+.status,
+.empty {
+  color: var(--text-muted);
+  margin: 0.5rem 0 0;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e2e8f0);
+  margin-top: 0.5rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.table th {
+  background: var(--bg, #f1f5f9);
+  font-weight: 600;
+}
+
+.table tbody tr:hover {
+  background: var(--bg, #fff);
+}
+
+.cellWrap {
+  max-width: 240px;
+  word-wrap: break-word;
+}
+
+.checkLabel {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.checkLabel input {
+  width: 1.1rem;
+  height: 1.1rem;
+}

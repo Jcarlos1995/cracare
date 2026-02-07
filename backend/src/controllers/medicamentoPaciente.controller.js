@@ -28,13 +28,21 @@ export const getGrid = async (req, res) => {
     const list = await prisma.medicamentoPaciente.findMany({
       where,
       include: {
-        paciente: { select: { id: true, nombre: true, apellidos: true }, include: { tratamientos: { select: { descripcion: true } } } },
+        paciente: {
+          select: {
+            id: true,
+            nombre: true,
+            apellidos: true,
+            tratamientos: { select: { descripcion: true } },
+          },
+        },
         efectuadoPor: { select: { id: true, nombre: true, apellidos: true, rol: true } },
       },
-      orderBy: [{ efectuado: 'asc' }, { fechaHora: 'asc' }, { createdAt: 'desc' }],
+      orderBy: [{ efectuado: 'asc' }, { createdAt: 'desc' }],
     });
     res.json({ data: list });
   } catch (error) {
+    console.error('getGrid medicaciones:', error);
     res.status(500).json({ message: error.message });
   }
 };

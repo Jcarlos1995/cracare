@@ -1,0 +1,132 @@
+.page {
+  padding: 0.5rem 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filtros {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input, .select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.select { min-width: 140px; }
+
+.error {
+  color: var(--error, #dc2626);
+  margin: 0 0 1rem;
+}
+
+.status, .empty {
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: var(--bg, #fff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalContent h2 { margin: 0 0 1rem; font-size: 1.25rem; }
+
+.modalContent label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.modalContent label input,
+.modalContent label select,
+.modalContent label textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.textarea { resize: vertical; min-height: 56px; }
+
+.formActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e2e8f0);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.table th {
+  background: var(--bg-secondary, #f1f5f9);
+  font-weight: 600;
+}
+
+.table tbody tr:hover {
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge[data-cat="SANITARIA"] { background: #dbeafe; color: #1e40af; }
+.badge[data-cat="BASICOS_OTROS"] { background: #e0e7ff; color: #3730a3; }

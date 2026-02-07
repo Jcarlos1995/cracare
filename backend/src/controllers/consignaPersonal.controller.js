@@ -1,20 +1,11 @@
 import { prisma } from '../config/database.js';
-import { ROLES } from '../utils/roles.js';
 
-function canAccessPaciente(user, paciente) {
-  if (user.rol === ROLES.ADMINISTRADOR) return true;
-  if (user.rol === ROLES.RAA && paciente.raaId === user.id) return true;
-  if (user.rol === ROLES.RAS || user.rol === ROLES.MEDICO) return true;
-  return false;
-}
-
-/** GET listado de consignas personales de un paciente (quien pueda ver el paciente) */
+/** GET listado de consignas personales de un paciente (cualquier usuario autenticado) */
 export const getByPaciente = async (req, res) => {
   try {
     const { pacienteId } = req.params;
     const paciente = await prisma.paciente.findUnique({ where: { id: pacienteId } });
     if (!paciente) return res.status(404).json({ message: 'Paciente no encontrado' });
-    if (!canAccessPaciente(req.user, paciente)) return res.status(403).json({ message: 'No autorizado' });
     const list = await prisma.consignaPersonal.findMany({
       where: { pacienteId },
       include: { autor: { select: { id: true, nombre: true, apellidos: true, rol: true } } },
@@ -26,7 +17,7 @@ export const getByPaciente = async (req, res) => {
   }
 };
 
-/** POST nueva consigna personal (cualquier usuario autenticado que pueda acceder al paciente) */
+/** POST nueva consigna personal (cualquier usuario autenticado) */
 export const create = async (req, res) => {
   try {
     const { pacienteId } = req.params;
@@ -34,7 +25,6 @@ export const create = async (req, res) => {
     if (!contenido?.trim()) return res.status(400).json({ message: 'El contenido es obligatorio' });
     const paciente = await prisma.paciente.findUnique({ where: { id: pacienteId } });
     if (!paciente) return res.status(404).json({ message: 'Paciente no encontrado' });
-    if (!canAccessPaciente(req.user, paciente)) return res.status(403).json({ message: 'No autorizado' });
     const item = await prisma.consignaPersonal.create({
       data: {
         pacienteId,

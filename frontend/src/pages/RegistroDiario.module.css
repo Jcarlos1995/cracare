@@ -1,0 +1,89 @@
+.page {
+  padding: 0.5rem 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.toolbar {
+  margin-bottom: 1rem;
+}
+
+.toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.input {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.error {
+  color: var(--error, #dc2626);
+  margin-bottom: 1rem;
+}
+
+.status,
+.empty {
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  padding: 1rem;
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.cardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.check input {
+  width: 1rem;
+  height: 1rem;
+}

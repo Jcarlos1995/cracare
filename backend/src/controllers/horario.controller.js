@@ -39,6 +39,25 @@ export const getHorariosMes = async (req, res) => {
   }
 };
 
+// OSS: ver mis turnos asignados (por mes o por rango de fechas)
+export const getMisTurnos = async (req, res) => {
+  try {
+    const { anio, mes } = req.query;
+    const anioNum = Number(anio);
+    const mesNum = Number(mes);
+    if (!anioNum || !mesNum) return res.status(400).json({ message: 'anio y mes son obligatorios' });
+    const start = new Date(anioNum, mesNum - 1, 1);
+    const end = new Date(anioNum, mesNum, 0);
+    const horarios = await prisma.horarioDia.findMany({
+      where: { ossId: req.user.id, fecha: { gte: start, lte: end } },
+      orderBy: { fecha: 'asc' },
+    });
+    res.json({ data: horarios });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // RAA: guardar asignación de un día (varias asignaciones: turno -> ossId)
 export const setHorarioDia = async (req, res) => {
   try {

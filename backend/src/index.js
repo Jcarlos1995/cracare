@@ -28,6 +28,12 @@ import * as horarioEnfermera from './controllers/horarioEnfermera.controller.js'
 import * as medicamentoPaciente from './controllers/medicamentoPaciente.controller.js';
 import * as tratamientoPaciente from './controllers/tratamientoPaciente.controller.js';
 import * as consignaPersonal from './controllers/consignaPersonal.controller.js';
+import * as visitante from './controllers/visitante.controller.js';
+import * as cita from './controllers/cita.controller.js';
+import * as ingresoMaterial from './controllers/ingresoMaterial.controller.js';
+import * as registroCuidadosDiario from './controllers/registroCuidadosDiario.controller.js';
+import * as banoSemanal from './controllers/banoSemanal.controller.js';
+import * as terapiaRehabilitacion from './controllers/terapiaRehabilitacion.controller.js';
 import { ROLES } from './utils/roles.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -66,6 +72,9 @@ const adminOrRaaOrRasOrMedicoOrEnfermera = [authenticate, requireRoles([ROLES.AD
 const adminOrRas = [authenticate, requireRoles([ROLES.ADMINISTRADOR, ROLES.RAS])];
 const adminOrRasOrMedicoOrEnfermera = [authenticate, requireRoles([ROLES.ADMINISTRADOR, ROLES.RAS, ROLES.MEDICO, ROLES.ENFERMERA])];
 const adminOrMedico = [authenticate, requireRoles([ROLES.ADMINISTRADOR, ROLES.MEDICO])];
+const soloRecepcionista = [authenticate, requireRoles([ROLES.RECEPCIONISTA])];
+const ossOrRaa = [authenticate, requireRoles([ROLES.OSS, ROLES.RAA])];
+const soloFisioterapeuta = [authenticate, requireRoles([ROLES.FISIOTERAPEUTA])];
 
 app.get('/api/dashboard', authenticate, getDashboard);
 
@@ -86,10 +95,11 @@ app.post('/api/movimientos', admin, movimiento.createMovimiento);
 app.patch('/api/movimientos/:id', admin, movimiento.updateMovimiento);
 app.delete('/api/movimientos/:id', admin, movimiento.deleteMovimiento);
 
-app.get('/api/pacientes', adminOrRaaOrRasOrMedicoOrEnfermera, paciente.getPacientes);
-app.get('/api/pacientes/:pacienteId/consignas-personales', adminOrRaaOrRasOrMedicoOrEnfermera, consignaPersonal.getByPaciente);
-app.post('/api/pacientes/:pacienteId/consignas-personales', adminOrRaaOrRasOrMedicoOrEnfermera, consignaPersonal.create);
-app.get('/api/pacientes/:id', adminOrRaaOrRasOrMedicoOrEnfermera, paciente.getPaciente);
+app.get('/api/pacientes', authenticate, paciente.getPacientes);
+app.get('/api/pacientes/:pacienteId/consignas-personales', authenticate, consignaPersonal.getByPaciente);
+app.post('/api/pacientes/:pacienteId/consignas-personales', authenticate, consignaPersonal.create);
+app.get('/api/pacientes/:pacienteId/terapias', soloFisioterapeuta, terapiaRehabilitacion.getByPaciente);
+app.get('/api/pacientes/:id', authenticate, paciente.getPaciente);
 app.post('/api/pacientes', adminOrRaa, paciente.createPaciente);
 app.patch('/api/pacientes/:id', adminOrRaa, paciente.updatePaciente);
 app.delete('/api/pacientes/:id', adminOrRaa, paciente.deletePaciente);
@@ -119,13 +129,43 @@ app.patch('/api/solicitudes-insumo/:id/completada', authenticate, requireRoles([
 
 app.get('/api/horarios/equipo', raa, horario.getMiEquipo);
 app.get('/api/horarios/mes', raa, horario.getHorariosMes);
+app.get('/api/horarios/mis-turnos', authenticate, requireRoles([ROLES.OSS]), horario.getMisTurnos);
 app.post('/api/horarios/dia', raa, horario.setHorarioDia);
+
+app.get('/api/registro-cuidados', ossOrRaa, registroCuidadosDiario.getByFecha);
+app.post('/api/registro-cuidados', ossOrRaa, registroCuidadosDiario.upsert);
+
+app.get('/api/actividades', ossOrRaa, banoSemanal.getActividades);
+app.get('/api/actividades/banos', raa, banoSemanal.getAll);
+app.post('/api/actividades/banos', raa, banoSemanal.setBano);
 
 app.get('/api/horarios-enfermera/equipo', ras, horarioEnfermera.getMiEquipo);
 app.get('/api/horarios-enfermera/mes', ras, horarioEnfermera.getHorariosMes);
 app.post('/api/horarios-enfermera/dia', ras, horarioEnfermera.setHorarioDia);
 
 app.get('/api/diario-unificado', authenticate, consignaPersonal.getDiarioUnificado);
+
+// Recepcionista: citas (visitas), visitantes, ingresos de materiales
+app.get('/api/visitantes', soloRecepcionista, visitante.getVisitantes);
+app.get('/api/visitantes/:id', soloRecepcionista, visitante.getVisitante);
+app.post('/api/visitantes', soloRecepcionista, visitante.createVisitante);
+app.patch('/api/visitantes/:id', soloRecepcionista, visitante.updateVisitante);
+
+app.get('/api/citas/agendadas', soloRecepcionista, cita.getCitasAgendadas);
+app.get('/api/citas', soloRecepcionista, cita.getCitas);
+app.get('/api/citas/:id', soloRecepcionista, cita.getCita);
+app.post('/api/citas', soloRecepcionista, cita.createCita);
+app.patch('/api/citas/:id', soloRecepcionista, cita.updateCita);
+app.delete('/api/citas/:id', soloRecepcionista, cita.deleteCita);
+
+app.get('/api/ingresos-materiales', soloRecepcionista, ingresoMaterial.getIngresosMateriales);
+app.get('/api/ingresos-materiales/:id', soloRecepcionista, ingresoMaterial.getIngresoMaterial);
+app.post('/api/ingresos-materiales', soloRecepcionista, ingresoMaterial.createIngresoMaterial);
+
+app.get('/api/terapias', soloFisioterapeuta, terapiaRehabilitacion.getTerapias);
+app.post('/api/terapias', soloFisioterapeuta, terapiaRehabilitacion.create);
+app.patch('/api/terapias/:id', soloFisioterapeuta, terapiaRehabilitacion.update);
+app.delete('/api/terapias/:id', soloFisioterapeuta, terapiaRehabilitacion.remove);
 
 app.get('/api/reportes/mensual', admin, getReporteMensual);
 app.get('/api/reportes/export', admin, exportReporteExcel);

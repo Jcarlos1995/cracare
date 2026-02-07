@@ -11,6 +11,9 @@ export default function Layout() {
   const isRas = user?.rol === 'RAS';
   const isMedico = user?.rol === 'MEDICO';
   const isEnfermera = user?.rol === 'ENFERMERA';
+  const isRecepcionista = user?.rol === 'RECEPCIONISTA';
+  const isOss = user?.rol === 'OSS';
+  const isFisioterapeuta = user?.rol === 'FISIOTERAPEUTA';
 
   const handleLogout = () => {
     logout();
@@ -46,14 +49,40 @@ export default function Layout() {
               Horarios enfermera
             </NavLink>
           )}
-          {(isAdmin || isRaa || isRas || isMedico || isEnfermera) && (
-            <NavLink to="/pacientes" className={({ isActive }) => (isActive ? styles.navActive : '')}>
-              Pacientes
-            </NavLink>
+          <NavLink to="/pacientes" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+            Pacientes
+          </NavLink>
+          {isOss && (
+            <>
+              <NavLink to="/mis-turnos" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Mis turnos
+              </NavLink>
+              <NavLink to="/registro-diario" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Registro diario
+              </NavLink>
+              <NavLink to="/actividades" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Actividades
+              </NavLink>
+            </>
+          )}
+          {(isRaa && !isOss) && (
+            <>
+              <NavLink to="/registro-diario" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Registro diario
+              </NavLink>
+              <NavLink to="/actividades" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Actividades
+              </NavLink>
+            </>
           )}
           {(isAdmin || isRas || isMedico || isEnfermera) && (
             <NavLink to="/medicaciones" className={({ isActive }) => (isActive ? styles.navActive : '')}>
               Medicaciones
+            </NavLink>
+          )}
+          {isFisioterapeuta && (
+            <NavLink to="/terapias" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+              Terapia
             </NavLink>
           )}
           <NavLink to="/diario-unificado" className={({ isActive }) => (isActive ? styles.navActive : '')}>
@@ -63,6 +92,16 @@ export default function Layout() {
             <NavLink to="/diario-medicaciones" className={({ isActive }) => (isActive ? styles.navActive : '')}>
               Diario medicaciones
             </NavLink>
+          )}
+          {isRecepcionista && (
+            <>
+              <NavLink to="/citas" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Citas
+              </NavLink>
+              <NavLink to="/materiales" className={({ isActive }) => (isActive ? styles.navActive : '')}>
+                Materiales
+              </NavLink>
+            </>
           )}
           {isAdmin && (
             <>

@@ -14,11 +14,24 @@ function tratamientosText(paciente) {
 export default function Medicaciones() {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [togglingId, setTogglingId] = useState(null);
 
   const load = () => {
     setLoading(true);
-    medicacionesApi.getGrid().then((r) => setList(r.data || [])).catch(() => setList([])).finally(() => setLoading(false));
+    setError('');
+    medicacionesApi
+      .getGrid()
+      .then((r) => {
+        const data = Array.isArray(r) ? r : (r?.data ?? []);
+        setList(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        console.error('Error cargando medicaciones:', err);
+        setError(err?.message || 'Error al cargar medicaciones');
+        setList([]);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(load, []);
@@ -42,10 +55,14 @@ export default function Medicaciones() {
 
   return (
     <div className={styles.page}>
-      <h1>Medicaciones</h1>
+      <div className={styles.top}>
+        <h1>Medicaciones</h1>
+        <button type="button" className="btn btn-secondary" onClick={load} disabled={loading}>Actualizar</button>
+      </div>
       <p className={styles.subtitle}>Grid de medicamentos por paciente. Marca como efectuado cuando se administre la toma.</p>
+      {error && <p className="error-msg">{error}</p>}
       {loading && <p className={styles.status}>Cargando…</p>}
-      {!loading && list.length === 0 && <p className={styles.empty}>No hay medicaciones registradas.</p>}
+      {!loading && !error && list.length === 0 && <p className={styles.empty}>No hay medicaciones registradas. Añade medicamentos desde Pacientes → Ver un paciente.</p>}
       {!loading && list.length > 0 && (
         <div className="card table-wrap">
           <table>

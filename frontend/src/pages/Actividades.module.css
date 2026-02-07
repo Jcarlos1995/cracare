@@ -1,0 +1,110 @@
+.page {
+  padding: 0.5rem 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.error {
+  color: var(--error, #dc2626);
+  margin-bottom: 1rem;
+}
+
+.status,
+.empty {
+  color: var(--text-muted);
+}
+
+.card {
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.help {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lista li {
+  padding: 0.35rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.btnQuitar {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0 0.25rem;
+}
+
+.btnQuitar:hover {
+  color: var(--error, #dc2626);
+}
+
+.gridDias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.colDia {
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: var(--bg, #fff);
+}
+
+.colDia h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.colDiaHoy {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.badgeHoy {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.select {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.35rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+}

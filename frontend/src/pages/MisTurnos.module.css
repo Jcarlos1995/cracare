@@ -1,0 +1,73 @@
+.page {
+  padding: 0.5rem 0;
+}
+
+.subtitle {
+  margin: 0.25rem 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.status,
+.empty {
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+.calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  max-width: 560px;
+}
+
+.diaHeader {
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.celdaVacia {
+  min-height: 56px;
+  background: var(--bg-secondary, #f1f5f9);
+  border-radius: 4px;
+}
+
+.celda {
+  min-height: 56px;
+  padding: 0.35rem;
+  background: var(--bg-secondary, #f8fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.numDia {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.turno {
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-align: center;
+}

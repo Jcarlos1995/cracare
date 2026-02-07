@@ -27,6 +27,8 @@ export default function PacienteDetalle() {
   const canEditMedTrat = ['ADMINISTRADOR', 'RAS', 'MEDICO', 'ENFERMERA'].includes(user?.rol);
   const canEditPaciente = user?.rol === 'ADMINISTRADOR' || user?.rol === 'RAA';
   const canUploadHoja = user?.rol === 'ADMINISTRADOR' || user?.rol === 'RAA';
+  const isSoloLectura = user?.rol === 'RECEPCIONISTA';
+  const isSoloLecturaFisio = user?.rol === 'FISIOTERAPEUTA';
 
   const [paciente, setPaciente] = useState(null);
   const [medicamentos, setMedicamentos] = useState([]);
@@ -198,16 +200,18 @@ export default function PacienteDetalle() {
       <div className={styles.top}>
         <h1>Paciente: {[paciente.nombre, paciente.apellidos].filter(Boolean).join(' ')}</h1>
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.iconoConsignaPersonal}
-            onClick={openConsignaPersonal}
-            title="Consignas personales del residente (incidencias diarias)"
-            aria-label="Consignas personales"
-          >
-            <IconoPersona />
-            <span className={styles.iconoConsignaLabel}>Consigna personal</span>
-          </button>
+          {!isSoloLectura && (
+            <button
+              type="button"
+              className={styles.iconoConsignaPersonal}
+              onClick={openConsignaPersonal}
+              title="Consignas personales del residente (incidencias diarias)"
+              aria-label="Consignas personales"
+            >
+              <IconoPersona />
+              <span className={styles.iconoConsignaLabel}>Consigna personal</span>
+            </button>
+          )}
           <button type="button" className="btn btn-secondary" onClick={() => navigate('/pacientes')}>
             Volver a lista
           </button>
@@ -253,6 +257,7 @@ export default function PacienteDetalle() {
         </div>
       </div>
 
+      {!isSoloLectura && !isSoloLecturaFisio && (
       <div className="card" style={{ marginBottom: '1rem' }}>
         <h3>Medicamentos</h3>
         {medicamentos.length === 0 && <p className={styles.empty}>No hay medicamentos asignados.</p>}
@@ -297,7 +302,9 @@ export default function PacienteDetalle() {
           </>
         )}
       </div>
+      )}
 
+      {!isSoloLectura && !isSoloLecturaFisio && (
       <div className="card">
         <h3>Tratamientos</h3>
         {tratamientos.length === 0 && <p className={styles.empty}>No hay tratamientos asignados.</p>}
@@ -328,6 +335,7 @@ export default function PacienteDetalle() {
           </>
         )}
       </div>
+      )}
 
       {consignaPersonalOpen && (
         <div className={styles.modal} onClick={() => setConsignaPersonalOpen(false)}>

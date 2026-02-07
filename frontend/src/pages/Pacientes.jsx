@@ -12,7 +12,11 @@ export default function Pacientes() {
   const isRas = user?.rol === 'RAS';
   const isMedico = user?.rol === 'MEDICO';
   const isEnfermera = user?.rol === 'ENFERMERA';
+  const isRecepcionista = user?.rol === 'RECEPCIONISTA';
+  const isFisioterapeuta = user?.rol === 'FISIOTERAPEUTA';
   const isRasOrMedicoOrEnfermera = isRas || isMedico || isEnfermera;
+  const canEditPaciente = user?.rol === 'ADMINISTRADOR' || user?.rol === 'RAA';
+  const soloVerPaciente = isRasOrMedicoOrEnfermera || isRecepcionista || isFisioterapeuta;
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -95,7 +99,7 @@ export default function Pacientes() {
     <div className={styles.page}>
       <div className={styles.top}>
         <h1>Pacientes</h1>
-        {!isRasOrMedicoOrEnfermera && (
+        {canEditPaciente && (
           <button type="button" className="btn btn-primary" onClick={openCreate}>
             Nuevo paciente
           </button>
@@ -130,7 +134,7 @@ export default function Pacientes() {
                   {pdfHojaUrl(p) ? (
                     <button type="button" className="btn btn-secondary" style={{ marginRight: '0.5rem', padding: '0.4rem 0.75rem', fontSize: '0.9rem' }} onClick={() => setVerPdf(pdfHojaUrl(p))}>Ver PDF</button>
                   ) : null}
-                  {!isRasOrMedicoOrEnfermera && (
+                  {canEditPaciente && (
                     <>
                       <input ref={fileHojaRef} type="file" accept=".pdf,application/pdf" style={{ display: 'none' }} id={`hoja-${p.id}`} onChange={(e) => handleHojaFile(p.id, e)} />
                       <label htmlFor={`hoja-${p.id}`} className="btn btn-primary" style={{ padding: '0.4rem 0.75rem', fontSize: '0.9rem', cursor: 'pointer' }}>
@@ -141,7 +145,7 @@ export default function Pacientes() {
                 </td>
                 <td><span className={p.activo ? 'badge badge-active' : 'badge badge-inactive'}>{p.activo ? 'Activo' : 'Inactivo'}</span></td>
                 <td>
-                  {isRasOrMedicoOrEnfermera ? (
+                  {soloVerPaciente ? (
                     <button type="button" className="btn btn-primary" onClick={() => navigate(`/pacientes/${p.id}`)}>Ver</button>
                   ) : (
                     <>
