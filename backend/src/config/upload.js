@@ -1,18 +1,18 @@
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
+import { config } from './index.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const uploadsDir = path.join(__dirname, '../../uploads/contratos');
+const baseUploads = config.uploadsDir;
+const contratosDir = path.join(baseUploads, 'contratos');
+const hojasDir = path.join(baseUploads, 'hojas-clinicas');
 try {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+  fs.mkdirSync(contratosDir, { recursive: true });
+  fs.mkdirSync(hojasDir, { recursive: true });
 } catch (_) {}
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsDir);
-  },
+  destination: (req, file, cb) => cb(null, contratosDir),
   filename: (req, file, cb) => {
     const userId = req.params.id;
     const ext = path.extname(file.originalname) || '.pdf';
@@ -29,11 +29,6 @@ export const uploadContrato = multer({
     cb(new Error('Solo se permiten archivos PDF'));
   },
 }).single('contrato');
-
-const hojasDir = path.join(__dirname, '../../uploads/hojas-clinicas');
-try {
-  fs.mkdirSync(hojasDir, { recursive: true });
-} catch (_) {}
 
 const storageHoja = multer.diskStorage({
   destination: (req, file, cb) => cb(null, hojasDir),
