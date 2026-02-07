@@ -1,0 +1,11 @@
+.page { padding: 0.5rem 0; }
+.top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+.status, .empty { color: var(--text-muted); margin: 1rem 0; }
+.consignaHeader { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.autor { font-size: 0.9rem; color: var(--text-muted); }
+.contenido { white-space: pre-wrap; margin: 0.5rem 0; }
+.fecha { font-size: 0.85rem; color: var(--text-muted); margin: 0.5rem 0 0; }
+.actions { margin-top: 0.75rem; display: flex; gap: 0.5rem; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 10; padding: 1rem; }
+.modal .card { max-width: 100%; }
+.modal h2 { margin: 0 0 1rem; font-size: 1.25rem; }

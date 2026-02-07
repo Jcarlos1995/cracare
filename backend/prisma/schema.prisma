@@ -43,7 +43,192 @@ model User {
   rasId        String?  // Enfermera -> referencia a RAS
   raaId        String?  // OSS -> referencia a RAA
   departamento String?  // Administrador
+  contratoUrl  String?  // PDF del contrato (ruta o URL)
   fechaAlta    DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  consignas       Consigna[]
+  consignasPersonales ConsignaPersonal[]
+  solicitudesInsumo SolicitudInsumo[]
+  medicamentosEfectuados MedicamentoPaciente[] @relation("EfectuadoPor")
+}
+
+// Inventario: insumos de sanidad
+model Inventario {
+  id          String   @id @default(cuid())
+  nombre      String
+  descripcion String?
+  cantidad    Int      @default(0)
+  unidad      String   // unidades, cajas, litros, etc.
+  categoria   String   @default("sanidad") // sanidad, limpieza, etc.
+  minimo      Int?     // alerta cuando baje de este valor
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Consignas generales: comunicados para todos
+model Consigna {
+  id        String   @id @default(cuid())
+  titulo    String
+  contenido String   @db.Text
+  autorId   String
+  autor     User     @relation(fields: [autorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([autorId])
+}
+
+enum TipoMovimiento {
+  INGRESO
+  GASTO
+}
+
+// Movimientos para reportes de gastos/ingresos mensuales
+model Movimiento {
+  id        String         @id @default(cuid())
+  fecha     DateTime
+  tipo      TipoMovimiento
+  concepto  String
+  monto     Decimal        @db.Decimal(12, 2)
+  categoria String?
+  mes       Int
+  anio      Int
+  createdAt DateTime       @default(now())
+
+  @@index([anio, mes])
+}
+
+// Pacientes registrados (por piso/RAA)
+model Paciente {
+  id              String    @id @default(cuid())
+  nombre          String
+  apellidos       String?
+  dniNif          String?
+  fechaNacimiento DateTime?
+  fechaIngreso    DateTime?
+  activo          Boolean   @default(true)
+  raaId           String?   // RAA del piso al que pertenece el residente
+  hojaClinicaUrl  String?   // PDF hoja clínica
+  alergias        String?   @db.Text
+  patologias      String?   @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  medicamentos    MedicamentoPaciente[]
+  tratamientos    TratamientoPaciente[]
+  consignasPersonales ConsignaPersonal[]
+
+  @@index([raaId])
+}
+
+// Consignas personales del residente (incidencias diarias) — pueden escribir todos los roles
+model ConsignaPersonal {
+  id         String   @id @default(cuid())
+  pacienteId String
+  paciente   Paciente @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  autorId    String
+  autor      User     @relation(fields: [autorId], references: [id], onDelete: Cascade)
+  contenido  String   @db.Text
+  createdAt  DateTime @default(now())
+
+  @@index([pacienteId])
+  @@index([autorId])
+  @@index([createdAt])
+}
+
+model MedicamentoPaciente {
+  id             String    @id @default(cuid())
+  pacienteId     String
+  paciente       Paciente  @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  medicamento    String
+  dosis          String?
+  frecuencia     String?
+  indicaciones   String?   @db.Text
+  fechaHora      DateTime? // fecha y hora programada de la toma
+  efectuado      Boolean   @default(false)
+  efectuadoAt    DateTime?
+  efectuadoPorId String?
+  efectuadoPor   User?     @relation("EfectuadoPor", fields: [efectuadoPorId], references: [id], onDelete: SetNull)
+  creadoPorId    String?
+  createdAt      DateTime  @default(now())
+
+  @@index([pacienteId])
+  @@index([efectuado])
+  @@index([efectuadoAt])
+}
+
+model TratamientoPaciente {
+  id           String   @id @default(cuid())
+  pacienteId   String
+  paciente     Paciente @relation(fields: [pacienteId], references: [id], onDelete: Cascade)
+  descripcion  String   @db.Text
+  creadoPorId  String?
+  createdAt    DateTime @default(now())
+
+  @@index([pacienteId])
+}
+
+// Solicitudes de insumo (RAA -> Admin): falta insumo sanitario
+enum EstadoSolicitudInsumo {
+  PENDIENTE      // amarillo en dashboard admin
+  RECIBIDA       // verde - admin marcó recibida
+  PEDIDO_LISTO   // azul - admin marcó pedido listo, notifica a RAA
+  COMPLETADA     // RAA marcó recibido físicamente
+}
+
+model SolicitudInsumo {
+  id            String               @id @default(cuid())
+  solicitanteId String
+  solicitante   User?                @relation(fields: [solicitanteId], references: [id], onDelete: Cascade)
+  descripcion   String               @db.Text
+  estado        EstadoSolicitudInsumo @default(PENDIENTE)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@index([solicitanteId])
+  @@index([estado])
+}
+
+// Turnos del calendario mensual (RAA asigna a sus OSS)
+enum TurnoCalendario {
+  MANANA_1   // verde
+  MANANA_2   // naranja
+  TARDE_1    // azul
+  TARDE_2    // gris
+  GUARDIA    // amarillo
+}
+
+model HorarioDia {
+  id     String         @id @default(cuid())
+  raaId  String
+  fecha  DateTime       @db.Date
+  ossId  String?        // OSS asignado (null = sin asignar)
+  turno  TurnoCalendario
+  createdAt DateTime    @default(now())
+
+  @@unique([raaId, fecha, turno])
+  @@index([raaId])
+  @@index([raaId, fecha])
+}
+
+// Turnos calendario RAS (Enfermeras)
+enum TurnoEnfermera {
+  MANANA_1
+  MANANA_2
+  MANANA_3
+  TARDE_1
+  TARDE_2
+}
+
+model HorarioEnfermeraDia {
+  id          String         @id @default(cuid())
+  rasId       String
+  fecha       DateTime       @db.Date
+  enfermeraId String?
+  turno       TurnoEnfermera
+  createdAt   DateTime       @default(now())
+
+  @@unique([rasId, fecha, turno])
+  @@index([rasId])
+  @@index([rasId, fecha])
 }

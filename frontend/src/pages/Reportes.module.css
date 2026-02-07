@@ -1,0 +1,12 @@
+.page { padding: 0.5rem 0; }
+.subtitle { color: var(--text-muted); margin: 0.25rem 0 1rem; }
+.filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.5rem; margin-bottom: 1rem; }
+.totales { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.totales .card { display: flex; flex-direction: column; gap: 0.25rem; }
+.totales .card span { font-size: 0.9rem; color: var(--text-muted); }
+.positivo { color: #059669; }
+.negativo { color: var(--error); }
+.status, .empty { color: var(--text-muted); margin: 1rem 0; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 10; padding: 1rem; }
+.modal .card { max-width: 100%; }
+.modal h3 { margin: 0 0 1rem; }

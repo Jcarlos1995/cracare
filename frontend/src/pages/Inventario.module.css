@@ -1,0 +1,14 @@
+.page { padding: 0.5rem 0; }
+.top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+.status, .empty { color: var(--text-muted); margin: 1rem 0; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 10; padding: 1rem; }
+.modal .card { max-width: 100%; }
+.modal h2 { margin: 0 0 1rem; font-size: 1.25rem; }
+.subtitle { color: var(--text-muted); margin: 0.25rem 0 1rem; }
+.solicitudesRaa { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; }
+.solCard { padding: 0.75rem; border-radius: 8px; border-left: 4px solid #ca8a04; }
+.solCard[data-estado="RECIBIDA"] { border-left-color: #16a34a; }
+.solCard[data-estado="PEDIDO_LISTO"] { border-left-color: #2563eb; }
+.solCard[data-estado="COMPLETADA"] { border-left-color: #6b7280; }
+.solDesc { font-weight: 500; }
+.solMeta { font-size: 0.85rem; color: var(--text-muted); margin: 0.35rem 0 0.5rem; }

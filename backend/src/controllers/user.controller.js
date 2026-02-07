@@ -20,6 +20,7 @@ const userSelect = {
   rasId: true,
   raaId: true,
   departamento: true,
+  contratoUrl: true,
   fechaAlta: true,
   createdAt: true,
 };
@@ -149,6 +150,7 @@ export const updateUser = async (req, res) => {
       activo,
       rasId,
       raaId,
+      contratoUrl,
     } = req.body;
     const id = req.params.id;
 
@@ -169,6 +171,7 @@ export const updateUser = async (req, res) => {
     if (turno !== undefined) data.turno = turno || null;
     if (departamento !== undefined) data.departamento = departamento?.trim() || null;
     if (activo !== undefined) data.activo = Boolean(activo);
+    if (contratoUrl !== undefined) data.contratoUrl = contratoUrl?.trim() || null;
     if (rasId !== undefined || raaId !== undefined) {
       const existing = await prisma.user.findUnique({ where: { id }, select: { rol: true } });
       if (!existing) return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -219,6 +222,23 @@ export const deleteUser = async (req, res) => {
     });
 
     res.json({ message: 'Usuario desactivado' });
+  } catch (error) {
+    if (error.code === 'P2025') return res.status(404).json({ message: 'Usuario no encontrado' });
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const uploadContratoPdf = async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No se envió ningún archivo PDF' });
+    const id = req.params.id;
+    const relativePath = `/uploads/contratos/${req.file.filename}`;
+    const user = await prisma.user.update({
+      where: { id },
+      data: { contratoUrl: relativePath },
+      select: userSelect,
+    });
+    res.json({ data: user });
   } catch (error) {
     if (error.code === 'P2025') return res.status(404).json({ message: 'Usuario no encontrado' });
     res.status(500).json({ message: error.message });

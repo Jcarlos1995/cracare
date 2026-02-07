@@ -1,0 +1,30 @@
+.page { padding: 0.5rem 0; }
+.top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+.actions { display: flex; gap: 0.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem 1.5rem; margin-bottom: 1rem; }
+.hojaSection { margin-top: 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem; }
+.lista { list-style: none; padding: 0; margin: 0 0 1rem; }
+.lista li { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.lista li:last-child { border-bottom: none; }
+.indicaciones { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem; width: 100%; }
+.formInline { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+.formInline input { min-width: 120px; padding: 0.4rem 0.5rem; }
+.formMedicamento { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+.formMedicamento input { min-width: 120px; padding: 0.4rem 0.5rem; }
+.fechaHoraRow { display: flex; gap: 0.25rem; }
+.medMeta { font-size: 0.9rem; color: var(--text-muted); display: block; margin-top: 0.2rem; }
+.status, .empty { color: var(--text-muted); margin: 0.5rem 0; }
+.iconoConsignaPersonal { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); cursor: pointer; color: var(--accent); }
+.iconoConsignaPersonal:hover { background: var(--border); }
+.iconoConsignaLabel { font-size: 0.9rem; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 10; padding: 1rem; }
+.pdfViewer { background: white; padding: 1rem; border-radius: 8px; max-width: 95vw; }
+.modalConsignaPersonal { background: white; padding: 1.25rem; border-radius: 8px; max-width: 520px; width: 100%; max-height: 85vh; overflow: auto; }
+.modalConsignaPersonal h3 { margin: 0 0 0.25rem; }
+.consignaSubtitle { color: var(--text-muted); font-size: 0.9rem; margin: 0 0 1rem; }
+.consignasList { max-height: 280px; overflow-y: auto; margin-bottom: 1rem; }
+.consignaCard { padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; }
+.consignaContenido { white-space: pre-wrap; margin-bottom: 0.35rem; }
+.consignaMeta { font-size: 0.85rem; color: var(--text-muted); }
+.formNuevaConsigna { display: flex; flex-direction: column; gap: 0.5rem; }
+.formNuevaConsigna textarea { width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); resize: vertical; }

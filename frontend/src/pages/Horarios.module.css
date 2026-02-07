@@ -1,0 +1,17 @@
+.page { padding: 0.5rem 0; }
+.subtitle { color: var(--text-muted); margin: 0.25rem 0 1rem; }
+.aviso { background: #fef3c7; color: #92400e; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; }
+.controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.leyendaItem { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: white; }
+.calendario { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+.diaCard { border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; }
+.diaHeader { font-weight: 600; margin-bottom: 0.5rem; }
+.slots { display: flex; flex-direction: column; gap: 0.25rem; }
+.slot { padding: 0.25rem 0; padding-left: 0.5rem; border-left: 3px solid; font-size: 0.9rem; }
+.slotLabel { color: var(--text-muted); margin-right: 0.35rem; }
+.slotNombre { font-weight: 500; }
+.status, .empty { color: var(--text-muted); margin: 1rem 0; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 10; padding: 1rem; }
+.modal .card { max-width: 100%; }
+.modal h3 { margin: 0 0 1rem; }

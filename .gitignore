@@ -14,6 +14,12 @@ dist/
 *.log
 .DS_Store
 
+# PDFs subidos (contratos)
+backend/uploads/contratos/*
+!backend/uploads/contratos/.gitkeep
+backend/uploads/hojas-clinicas/*
+!backend/uploads/hojas-clinicas/.gitkeep
+
 # IDE
 .idea/
 .vscode/

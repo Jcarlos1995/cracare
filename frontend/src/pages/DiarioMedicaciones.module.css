@@ -1,0 +1,8 @@
+.page { padding: 0.5rem 0; }
+.subtitle { color: var(--text-muted); margin: 0.25rem 0 1rem; }
+.status, .empty { color: var(--text-muted); margin: 1rem 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; background: var(--bg); }
+.cardPaciente { font-weight: 600; margin-bottom: 0.35rem; color: var(--accent); }
+.cardMedicamento { margin-bottom: 0.35rem; }
+.cardMeta { font-size: 0.85rem; color: var(--text-muted); }
